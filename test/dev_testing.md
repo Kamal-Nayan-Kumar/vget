@@ -5,7 +5,7 @@ This guide is for the **Developer** laptop. You will act as the creator of a sof
 ## 1. Install the CLI & Connect to Cloud
 
 Download the pre-compiled binary for your operating system from the GitHub Releases page:
-[https://github.com/Kamal-Nayan-Kumar/data_security/releases/latest](https://github.com/Kamal-Nayan-Kumar/data_security/releases/latest)
+[https://github.com/Kamal-Nayan-Kumar/vget/releases/latest](https://github.com/Kamal-Nayan-Kumar/vget/releases/latest)
 
 Extract the downloaded file and open your terminal in that folder.
 
@@ -16,14 +16,14 @@ chmod +x vget-linux-amd64   # or vget-macos-amd64 / vget-macos-arm64
 
 # Set up aliases and point to the cloud backend
 export VGET="./vget-linux-amd64" 
-export VGET_API_URL="https://data-security-backend.onrender.com"
+export VGET_API_URL="https://vget-backend.onrender.com"
 ```
 
 ### 🪟 Windows (PowerShell)
 ```powershell
 # Set up aliases and point to the cloud backend
 $env:VGET=".\vget-windows-amd64.exe"
-$env:VGET_API_URL="https://data-security-backend.onrender.com"
+$env:VGET_API_URL="https://vget-backend.onrender.com"
 ```
 
 ## 2. Setup Identity
