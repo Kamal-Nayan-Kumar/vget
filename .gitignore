@@ -1,0 +1,56 @@
+# Rust
+/target/
+/backend/target/
+/cli/target/
+**/*.rs.bk
+
+# Node 
+node_modules/
+
+# Environment Variables
+.env
+*.env
+.env.*
+
+# OS
+.DS_Store
+
+# VaultGet specific runtime artifacts
+/uploads/
+/downloads/
+/installed/
+/.vget/
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+
+# Frontend
+frontend/dist/
+
+# Virtual environment
+venv/
+.venv/
+
+# Python Cache
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Trashed files
+.trash/
+
+# PyInstaller build artifacts
+build/
+dist/
+*.spec
+
+# AI Agent Artifacts
+.sisyphus/
+AGENTS.md
+
+*.bak
+bad-package/
+data-security-quiz/
