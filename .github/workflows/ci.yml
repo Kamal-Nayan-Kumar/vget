@@ -26,10 +26,30 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18'
+        node-version: '20'
         
     - name: Build Frontend
       run: |
         cd frontend
         npm install
         npm run build
+
+  release:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v1.0.${{ github.run_number }}
+        name: Release v1.0.${{ github.run_number }}
+        body: |
+          Auto-generated deployment release for the Data Security & Privacy capstone project.
+          - Verified Zero-Trust Backend logic
+          - Packaged AI Code Checker ML algorithms
+          - Bundled Vercel-ready frontend
+        draft: false
+        prerelease: false
