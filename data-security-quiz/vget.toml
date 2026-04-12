@@ -1,0 +1,3 @@
+name = "data-security-quiz"
+description = "A terminal-based Data Security Quiz that educates users on core InfoSec principles"
+entrypoint = "run.sh"
