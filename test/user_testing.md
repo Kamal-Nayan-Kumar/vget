@@ -29,7 +29,7 @@ $env:VGET_API_URL="https://vget-backend.onrender.com"
 ## 2. Browse the Package Repository
 
 Open your deployed **Vercel** Frontend URL in your browser:
-**https://data-security-frontend-git-main-kamal-nayan-kumars-projects.vercel.app**
+**https://vget-teal.vercel.app/**
 *(or whatever custom domain you configured).*
 
 Search for the package the developer just published (e.g., `vget-assistant`) or use our pre-published example `data-security-quiz`. You should see it listed there!
