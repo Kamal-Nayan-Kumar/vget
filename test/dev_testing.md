@@ -64,20 +64,20 @@ Test the software locally first to ensure it works properly, then publish it. Pu
 
 ### 🍎 Mac / 🐧 Linux (Terminal)
 ```bash
-# Test the quiz locally
-python ../data-security-quiz/quiz.py
+# Test the software locally (use python3 on Linux if python is not found)
+python3 vget-assistant/test_assistant.py
 
 # Publish to the live backend
-$VGET publish --path ../data-security-quiz --version 1.0.0
+$VGET publish --path vget-assistant --version 1.0.0
 ```
 
 ### 🪟 Windows (PowerShell)
 ```powershell
-# Test the quiz locally
-python ../data-security-quiz/quiz.py
+# Test the software locally (use python3 on Linux if python is not found)
+python3 vget-assistant/test_assistant.py
 
 # Publish to the live backend
-& $env:VGET publish --path ../data-security-quiz --version 1.0.0
+& $env:VGET publish --path vget-assistant --version 1.0.0
 ```
 
 ---
@@ -100,7 +100,7 @@ source .venv/bin/activate
 cd ../ml_scanner
 
 # Run the scanner against your package folder
-python main.py ../data-security-quiz
+python3 main.py ../vget-assistant
 ```
 
 You should see a `SECURITY SCAN REPORT` with a "REVIEW" or "PASS" decision and a low risk score (e.g., < 30).
