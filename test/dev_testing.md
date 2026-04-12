@@ -5,7 +5,7 @@ This guide is for the **Developer** laptop. You will act as the creator of a sof
 ## 1. Install the CLI & Connect to Cloud
 
 Download the pre-compiled binary for your operating system from the GitHub Releases page:
-[https://github.com/Kamal-Nayan-Kumar/data_security/releases/latest](https://github.com/Kamal-Nayan-Kumar/data_security/releases/latest)
+[https://github.com/Kamal-Nayan-Kumar/vget/releases/latest](https://github.com/Kamal-Nayan-Kumar/vget/releases/latest)
 
 Extract the downloaded file and open your terminal in that folder.
 
