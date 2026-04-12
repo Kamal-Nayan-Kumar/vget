@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from pydantic import BaseModel
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -241,7 +241,7 @@ def create_app(
         name: str,
         version: str,
         db: Annotated[AsyncSession, Depends(get_db)],
-    ) -> FileResponse:
+    ) -> Response:
         stmt = (
             select(PackageVersion)
             .join(Package, Package.id == PackageVersion.package_id)
@@ -251,12 +251,19 @@ def create_app(
         if pkg_version is None:
             raise HTTPException(status_code=404, detail="Package version not found")
 
-        file_path = Path(pkg_version.file_path)
-        if not file_path.exists():
-            raise HTTPException(status_code=404, detail="Package file not found")
+        if pkg_version.file_data:
+            return Response(
+                content=pkg_version.file_data,
+                media_type="application/octet-stream",
+            )
 
-        filename = f"{name}-{version}{file_path.suffix}"
-        return FileResponse(path=file_path, filename=filename)
+        if pkg_version.file_path:
+            file_path = Path(pkg_version.file_path)
+            if file_path.exists():
+                filename = f"{name}-{version}{file_path.suffix}"
+                return FileResponse(path=file_path, filename=filename)
+
+        raise HTTPException(status_code=404, detail="Package file not found")
 
     @app.post("/api/v1/developer/upload", status_code=201)
     async def upload_package(
@@ -328,18 +335,15 @@ def create_app(
                 status_code=409, detail="package version already exists"
             )
 
-        upload_bytes = await file.read()
-        original_name = Path(file.filename or "package.bin").name
-        file_name = f"{package_name}-{version}-{original_name}"
-        target_path = app.state.uploads_dir / file_name
-        target_path.write_bytes(upload_bytes)
+        file_data = await file.read()
 
         pkg_version = PackageVersion(
             package_id=package.id,
             version=version,
             checksum=checksum,
             signature=signature,
-            file_path=str(target_path),
+            file_data=file_data,
+            file_path=None,
         )
         db.add(pkg_version)
         await db.commit()
@@ -357,5 +361,3 @@ def create_app(
 
 
 app = create_app()
-
-
