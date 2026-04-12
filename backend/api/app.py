@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import Response
 from pydantic import BaseModel
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -201,6 +201,18 @@ def create_app(
             ]
         }
 
+    @app.delete("/api/v1/packages/{name}")
+    async def delete_package(
+        name: str,
+        db: Annotated[AsyncSession, Depends(get_db)],
+    ) -> dict:
+        pkg = await db.scalar(select(Package).where(Package.name == name))
+        if not pkg:
+            raise HTTPException(status_code=404, detail="package not found")
+        await db.delete(pkg)
+        await db.commit()
+        return {"detail": "package deleted"}
+
     @app.get("/api/v1/packages/{name}")
     async def get_package(
         name: str,
@@ -251,7 +263,7 @@ def create_app(
         if pkg_version is None:
             raise HTTPException(status_code=404, detail="Package version not found")
 
-        if pkg_version.file_data:
+        if pkg_version.file_data is not None:
             return Response(
                 content=pkg_version.file_data,
                 media_type="application/octet-stream",
@@ -260,8 +272,10 @@ def create_app(
         if pkg_version.file_path:
             file_path = Path(pkg_version.file_path)
             if file_path.exists():
-                filename = f"{name}-{version}{file_path.suffix}"
-                return FileResponse(path=file_path, filename=filename)
+                return Response(
+                    content=file_path.read_bytes(),
+                    media_type="application/octet-stream",
+                )
 
         raise HTTPException(status_code=404, detail="Package file not found")
 
@@ -335,15 +349,15 @@ def create_app(
                 status_code=409, detail="package version already exists"
             )
 
-        file_data = await file.read()
+        upload_bytes = await file.read()
 
         pkg_version = PackageVersion(
             package_id=package.id,
             version=version,
             checksum=checksum,
             signature=signature,
-            file_data=file_data,
             file_path=None,
+            file_data=upload_bytes,
         )
         db.add(pkg_version)
         await db.commit()

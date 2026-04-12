@@ -4,10 +4,8 @@ This guide is for the **User** laptop. You will act as the consumer of a softwar
 
 ## 1. Install the CLI & Connect to Cloud
 
-You can view the published packages on the frontend website: [https://vget-teal.vercel.app/](https://vget-teal.vercel.app/)
-
 Download the pre-compiled binary for your operating system from the GitHub Releases page:
-[https://github.com/Kamal-Nayan-Kumar/vget/releases/latest](https://github.com/Kamal-Nayan-Kumar/vget/releases/latest)
+[https://github.com/Kamal-Nayan-Kumar/data_security/releases/latest](https://github.com/Kamal-Nayan-Kumar/data_security/releases/latest)
 
 Extract the downloaded file and open your terminal in that folder.
 
@@ -31,13 +29,14 @@ $env:VGET_API_URL="https://vget-backend.onrender.com"
 ## 2. Browse the Package Repository
 
 Open your deployed **Vercel** Frontend URL in your browser:
-**https://vget-teal.vercel.app/**
+**https://data-security-frontend-git-main-kamal-nayan-kumars-projects.vercel.app**
+*(or whatever custom domain you configured).*
 
-Search for the package the developer just published (e.g., `data-security-quiz`). You should see it listed there with its version `1.0.0`!
+Search for the package the developer just published (e.g., `vget-assistant`) or use our pre-published example `data-security-quiz`. You should see it listed there!
 
 ## 3. Securely Install the Package
 
-Grab the exact package name from the Vercel dashboard and run this command.
+Grab the exact package name from the Vercel dashboard or use the example below, and run this command.
 
 ### 🍎 Mac / 🐧 Linux (Terminal)
 ```bash
@@ -46,7 +45,7 @@ $VGET install "$PACKAGE_TO_INSTALL"
 
 # Check the extracted package contents
 ls -la "./installed/$PACKAGE_TO_INSTALL/1.0.0"
-cat "./installed/$PACKAGE_TO_INSTALL/1.0.0/quiz.py"
+cat "./installed/$PACKAGE_TO_INSTALL/1.0.0/index.js"
 ```
 
 ### 🪟 Windows (PowerShell)
@@ -56,7 +55,7 @@ $PACKAGE_TO_INSTALL="data-security-quiz"
 
 # Check the extracted package contents
 Get-ChildItem ".\installed\$PACKAGE_TO_INSTALL\1.0.0"
-Get-Content ".\installed\$PACKAGE_TO_INSTALL\1.0.0\quiz.py"
+Get-Content ".\installed\$PACKAGE_TO_INSTALL\1.0.0\index.js"
 ```
 
 ## 🔐 Security Checks (What Happens Automatically)
