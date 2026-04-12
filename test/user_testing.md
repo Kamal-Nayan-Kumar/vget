@@ -4,6 +4,8 @@ This guide is for the **User** laptop. You will act as the consumer of a softwar
 
 ## 1. Install the CLI & Connect to Cloud
 
+You can view the published packages on the frontend website: [https://vget-teal.vercel.app/](https://vget-teal.vercel.app/)
+
 Download the pre-compiled binary for your operating system from the GitHub Releases page:
 [https://github.com/Kamal-Nayan-Kumar/vget/releases/latest](https://github.com/Kamal-Nayan-Kumar/vget/releases/latest)
 
@@ -29,10 +31,9 @@ $env:VGET_API_URL="https://vget-backend.onrender.com"
 ## 2. Browse the Package Repository
 
 Open your deployed **Vercel** Frontend URL in your browser:
-**https://data-security-frontend-git-main-kamal-nayan-kumars-projects.vercel.app**
-*(or whatever custom domain you configured).*
+**https://vget-teal.vercel.app/**
 
-Search for the package the developer just published (e.g., `my-awesome-app-177...`). You should see it listed there with its version `1.0.0`!
+Search for the package the developer just published (e.g., `data-security-quiz`). You should see it listed there with its version `1.0.0`!
 
 ## 3. Securely Install the Package
 
@@ -40,22 +41,22 @@ Grab the exact package name from the Vercel dashboard and run this command.
 
 ### 🍎 Mac / 🐧 Linux (Terminal)
 ```bash
-export PACKAGE_TO_INSTALL="<paste-package-name-here>"
+export PACKAGE_TO_INSTALL="data-security-quiz"
 $VGET install "$PACKAGE_TO_INSTALL"
 
 # Check the extracted package contents
 ls -la "./installed/$PACKAGE_TO_INSTALL/1.0.0"
-cat "./installed/$PACKAGE_TO_INSTALL/1.0.0/index.js"
+cat "./installed/$PACKAGE_TO_INSTALL/1.0.0/quiz.py"
 ```
 
 ### 🪟 Windows (PowerShell)
 ```powershell
-$PACKAGE_TO_INSTALL="<paste-package-name-here>"
+$PACKAGE_TO_INSTALL="data-security-quiz"
 & $env:VGET install "$PACKAGE_TO_INSTALL"
 
 # Check the extracted package contents
 Get-ChildItem ".\installed\$PACKAGE_TO_INSTALL\1.0.0"
-Get-Content ".\installed\$PACKAGE_TO_INSTALL\1.0.0\index.js"
+Get-Content ".\installed\$PACKAGE_TO_INSTALL\1.0.0\quiz.py"
 ```
 
 ## 🔐 Security Checks (What Happens Automatically)

@@ -4,6 +4,8 @@ This guide is for the **Developer** laptop. You will act as the creator of a sof
 
 ## 1. Install the CLI & Connect to Cloud
 
+You can view the published packages on the frontend website: [https://vget-teal.vercel.app/](https://vget-teal.vercel.app/)
+
 Download the pre-compiled binary for your operating system from the GitHub Releases page:
 [https://github.com/Kamal-Nayan-Kumar/vget/releases/latest](https://github.com/Kamal-Nayan-Kumar/vget/releases/latest)
 
@@ -56,31 +58,31 @@ $DEV_USER="dev_$([math]::Floor([datetimeOffset]::UtcNow.ToUnixTimeSeconds()))"
 & $env:VGET dev-register --username "$DEV_USER"
 ```
 
-## 3. Test & Publish the Assistant Package
+## 3. Test & Publish the Quiz Package
 
 Test the software locally first to ensure it works properly, then publish it. Publishing will automatically compress the folder, generate a SHA256 checksum, sign the checksum with your private key, and upload the payload to the server.
 
 ### 🍎 Mac / 🐧 Linux (Terminal)
 ```bash
-# Test the assistant locally
-python vget-assistant/test_assistant.py
+# Test the quiz locally
+python ../data-security-quiz/quiz.py
 
 # Publish to the live backend
-$VGET publish --path vget-assistant --version 1.0.0
+$VGET publish --path ../data-security-quiz --version 1.0.0
 ```
 
 ### 🪟 Windows (PowerShell)
 ```powershell
-# Test the assistant locally
-python vget-assistant/test_assistant.py
+# Test the quiz locally
+python ../data-security-quiz/quiz.py
 
 # Publish to the live backend
-& $env:VGET publish --path vget-assistant --version 1.0.0
+& $env:VGET publish --path ../data-security-quiz --version 1.0.0
 ```
 
 ---
 
-**Success!** If the backend ML scanner detects no threats, your package is now live. Give the package name `vget-assistant` to the "User" laptop to test the installation.
+**Success!** If the backend ML scanner detects no threats, your package is now live. Give the package name `data-security-quiz` to the "User" laptop to test the installation.
 
 > **Note on Windows (.exe):** 
 > Do **not** double-click the `vget-windows-amd64.exe` file! It is a Command-Line Interface (CLI) tool. If you double-click it, a black window will flash for a split second and close immediately because it expects terminal arguments. You must run it from inside your PowerShell terminal using the `.\` or `&` syntax shown above.
@@ -95,10 +97,10 @@ Before publishing, it is highly recommended to run the ML Code Checker locally t
 source .venv/bin/activate
 
 # Navigate to the ml_scanner directory
-cd ml_scanner
+cd ../ml_scanner
 
 # Run the scanner against your package folder
-python main.py ../vget-assistant
+python main.py ../data-security-quiz
 ```
 
 You should see a `SECURITY SCAN REPORT` with a "REVIEW" or "PASS" decision and a low risk score (e.g., < 30).

@@ -273,6 +273,9 @@ def publish(path: str = typer.Option(...), version: str = typer.Option(...)) -> 
                     headers={"Authorization": f"Bearer {token}"},
                 )
 
+        if is_dir and upload_path.exists():
+            upload_path.unlink()
+
     try:
         resp.raise_for_status()
     except httpx.HTTPError as e:
