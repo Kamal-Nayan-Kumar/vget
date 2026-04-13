@@ -41,14 +41,17 @@ def _load_codebert():
         from transformers import AutoTokenizer, AutoModel
         import torch
 
+        print("⏳ Loading AI Model (CodeBERT)... This may take a few minutes on the first run as the model (~500MB) is downloaded.")
+        
         _tokenizer = AutoTokenizer.from_pretrained("microsoft/codebert-base")
         _codebert_model = AutoModel.from_pretrained("microsoft/codebert-base")
         _codebert_model.eval()
 
         _codebert_available = True
-        print("[AI] CodeBERT loaded successfully.")
+        print("✅ CodeBERT loaded successfully.")
     except Exception as e:
-        print(f"[AI] CodeBERT failed: {e}")
+        print(f"❌ [AI] CodeBERT failed to load: {e}")
+        print("💡 Tip: Ensure you have an internet connection and have installed the requirements.")
         _codebert_available = False
 
     return _codebert_available

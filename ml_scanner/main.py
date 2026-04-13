@@ -80,6 +80,8 @@ def run_scan(directory: str, output_json: bool = False, save_report: bool = Fals
         secret_issues = scan_secrets(content)
         dep_issues    = scan_dependencies(file_path, content)
         config_issues = scan_config(file_path, content)
+        
+        print(f"  🧠 Running AI analysis on: {os.path.basename(file_path)}...")
         ai_score      = ai_risk_score(content)
 
         file_risk = calculate_risk(
