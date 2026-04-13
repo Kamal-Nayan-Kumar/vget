@@ -247,8 +247,12 @@ def publish(path: str = typer.Option(...), version: str = typer.Option(...)) -> 
         bold=True,
     )
     try:
+        # Determine the correct python interpreter
+        # If running as a bundled binary, sys.executable is the binary itself, so we use 'python3'
+        interpreter = "python3" if getattr(sys, 'frozen', False) else sys.executable
+
         result = subprocess.run(
-            [sys.executable, "main.py", str(package_path.resolve())],
+            [interpreter, "main.py", str(package_path.resolve())],
             cwd=str(ml_scanner_dir),
             capture_output=True,
             text=True,
