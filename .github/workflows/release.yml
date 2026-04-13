@@ -42,8 +42,11 @@ jobs:
           pip install pyinstaller typer
 
       - name: Build CLI Binary
+        shell: bash
         run: |
-          pyinstaller --onefile cli/main.py --name vget
+          SEP=":"
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then SEP=";"; fi
+          pyinstaller --onefile --add-data "ml_scanner${SEP}ml_scanner" cli/main.py --name vget
 
       - name: Rename Binary
         shell: bash

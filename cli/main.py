@@ -219,60 +219,85 @@ def publish(path: str = typer.Option(...), version: str = typer.Option(...)) -> 
             "developer_username missing in ~/.vget/config.json. Run login/dev-register first."
         )
 
-    ml_scanner_dir = Path(__file__).resolve().parent.parent / "ml_scanner"
+    # Determine the directory where ml_scanner is located
+    if getattr(sys, 'frozen', False):
+        # Running as a bundled executable (PyInstaller)
+        base_dir = Path(sys._MEIPASS)
+    else:
+        # Running as a source script
+        base_dir = Path(__file__).resolve().parent.parent
+
+    ml_scanner_dir = base_dir / "ml_scanner"
     scanner_main = ml_scanner_dir / "main.py"
 
-    if scanner_main.exists():
+    if not scanner_main.exists():
         typer.secho(
-            "\n🛡️  Running AI Code Checker on package before publication...",
-            fg=typer.colors.CYAN,
+            "\n❌ [Critical Error] Security scanner not found!",
+            fg=typer.colors.RED,
             bold=True,
         )
-        try:
-            result = subprocess.run(
-                [sys.executable, "main.py", str(package_path.resolve())],
-                cwd=str(ml_scanner_dir),
-                capture_output=True,
-                text=True,
-            )
-            print(result.stdout)
+        typer.echo("For security reasons, you cannot publish a package without a successful security scan.")
+        typer.echo(f"Expected scanner location: {scanner_main}")
+        typer.echo("\nIf you are a developer, ensure the 'ml_scanner' folder exists in the project root.")
+        raise typer.Exit(code=1)
 
-            if "DECISION: BLOCK" in result.stdout:
-                typer.secho(
-                    "❌ Publication blocked! Critical security vulnerabilities detected.",
-                    fg=typer.colors.RED,
-                    bold=True,
-                )
-                raise typer.Exit(code=1)
-            elif "DECISION: WARN" in result.stdout:
-                typer.secho(
-                    "⚠️  Publication blocked! High-risk issues found. Please fix them before publishing.",
-                    fg=typer.colors.RED,
-                    bold=True,
-                )
-                raise typer.Exit(code=1)
-            elif result.returncode != 0:
-                 typer.secho(
-                    f"❌ Security scan failed with exit code {result.returncode}. Aborting publication.",
-                    fg=typer.colors.RED,
-                    bold=True,
-                )
-                 raise typer.Exit(code=1)
-            else:
-                typer.secho(
-                    "✅ Code Check Passed! Proceeding with cryptographic signing...\n",
-                    fg=typer.colors.GREEN,
-                    bold=True,
-                )
-        except Exception as e:
-            if isinstance(e, typer.Exit):
-                raise e
+    typer.secho(
+        "\n🛡️  Running AI Code Checker on package before publication...",
+        fg=typer.colors.CYAN,
+        bold=True,
+    )
+    try:
+        result = subprocess.run(
+            [sys.executable, "main.py", str(package_path.resolve())],
+            cwd=str(ml_scanner_dir),
+            capture_output=True,
+            text=True,
+        )
+        print(result.stdout)
+
+        if "DECISION: BLOCK" in result.stdout:
             typer.secho(
-                f"\n❌ [Critical] Security scan execution failed: {e}\nAborting publication to ensure safety.",
+                "❌ Publication blocked! Critical security vulnerabilities detected.",
                 fg=typer.colors.RED,
                 bold=True,
             )
             raise typer.Exit(code=1)
+        elif "DECISION: WARN" in result.stdout:
+            typer.secho(
+                "⚠️  Publication blocked! High-risk issues found. Please fix them before publishing.",
+                fg=typer.colors.RED,
+                bold=True,
+            )
+            raise typer.Exit(code=1)
+        elif result.returncode != 0:
+             typer.secho(
+                f"❌ Security scan execution failed (Exit Code: {result.returncode}).",
+                fg=typer.colors.RED,
+                bold=True,
+            )
+             # This often happens due to missing dependencies in the scanner's env
+             raise Exception(f"Internal scanner error or missing dependencies.")
+        else:
+            typer.secho(
+                "✅ Code Check Passed! Proceeding with cryptographic signing...\n",
+                fg=typer.colors.GREEN,
+                bold=True,
+            )
+    except Exception as e:
+        if isinstance(e, typer.Exit):
+            raise e
+        typer.secho(
+            f"\n❌ [Critical] Security scan failed: {e}",
+            fg=typer.colors.RED,
+            bold=True,
+        )
+        typer.secho("\n💡 Troubleshooting & Setup:", fg=typer.colors.YELLOW, bold=True)
+        typer.echo("1. Set up a virtual environment and activate it.")
+        typer.echo("2. Install dependencies: pip install -r ml_scanner/requirements.txt")
+        typer.echo("3. Specifically, install the CPU-only version of torch to keep it lightweight:")
+        typer.echo("   pip install torch --index-url https://download.pytorch.org/whl/cpu")
+        typer.echo("\nAborting publication to ensure safety.")
+        raise typer.Exit(code=1)
 
     token = _read_token()
 
